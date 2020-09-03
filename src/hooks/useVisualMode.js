@@ -4,9 +4,9 @@ const useVisualMode = (defaultVal) => {
 	const [mode, setMode] = useState(defaultVal);
 	const [history, setHistory] = useState([defaultVal]);
 
-	const transition = (newMode, option = false) => {
+	const transition = (newMode, replace = false) => {
 		setMode(newMode);
-		option
+		replace
 			? setHistory([...history.slice(0, -1), newMode])
 			: setHistory([...history, newMode]);
 	};
