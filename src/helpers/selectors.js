@@ -6,11 +6,6 @@ const getAppointmentsForDay = (state, day) => {
 	return selectedDay
 		? selectedDay.appointments.map((id) => appointments[id])
 		: [];
-	// if (!selectedDay) return [];
-
-	// const appointmentsid = selectedDay.appointments;
-	// const result = appointmentsid.map((id) => appointments[id]);
-	// return result;
 };
 
 module.exports.getAppointmentsForDay = getAppointmentsForDay;
