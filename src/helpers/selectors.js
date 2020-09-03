@@ -8,11 +8,9 @@ const getAppointmentsForDay = (state, day) => {
 		: [];
 };
 
-module.exports.getAppointmentsForDay = getAppointmentsForDay;
-
 const getInterview = (state, interview) =>
 	interview
 		? { ...interview, interviewer: state.interviewers[interview.interviewer] }
 		: null;
 
-module.exports.getInterview = getInterview;
+export { getInterview, getAppointmentsForDay };
