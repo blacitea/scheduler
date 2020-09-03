@@ -10,24 +10,26 @@ export default function Application(props) {
 		day: "",
 		days: [],
 		appointments: {},
+		interviewers: {},
 	});
 	const setDay = (day) => setState((prev) => ({ ...prev, day }));
-	// const setDays = (days) => setState((prev) => ({ ...prev, days }));
 	useEffect(() => {
 		Promise.all([
 			axios.get("http://localhost:8001/api/days"),
 			axios.get("http://localhost:8001/api/appointments"),
+			axios.get("http://localhost:8001/api/interviewers"),
 		])
 			.then((all) => {
-				const [days, appointments] = all;
+				const [days, appointments, interviewers] = all;
 				setState((prev) => {
-					return { ...prev, days: days.data, appointments: appointments.data };
+					return {
+						...prev,
+						days: days.data,
+						appointments: appointments.data,
+						interviewers: interviewers.data,
+					};
 				});
 			})
-
-			// axios
-			// 	.get("http://localhost:8001/api/days")
-			// .then((response) => setDays(response.data))
 			.catch((error) => console.error(error));
 	}, []);
 	const appointmentList = getAppointmentsForDay(state, state.day).map(
@@ -35,7 +37,7 @@ export default function Application(props) {
 			return <Appointment key={appointment.id} {...appointment} />;
 		}
 	);
-	appointmentList.push(<Appointment key="last" time="5pm" />);
+	console.log(appointmentList);
 	return (
 		<main className="layout">
 			<section className="sidebar">
@@ -54,7 +56,10 @@ export default function Application(props) {
 					alt="Lighthouse Labs"
 				/>
 			</section>
-			<section className="schedule">{appointmentList}</section>
+			<section className="schedule">
+				{appointmentList}
+				{appointmentList.length > 1 && <Appointment key="last" time="5pm" />}
+			</section>
 		</main>
 	);
 }
