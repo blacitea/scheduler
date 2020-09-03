@@ -8,6 +8,7 @@ const useVisualMode = (defaultVal) => {
 		setHistory([...history, newMode]);
 	};
 	const back = () => {
+		if (history.length <= 1) return;
 		const lastMode = history.length - 2;
 		setMode(history[lastMode]);
 		setHistory(history.slice(0, -1));
