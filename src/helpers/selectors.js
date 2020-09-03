@@ -13,4 +13,12 @@ const getInterview = (state, interview) =>
 		? { ...interview, interviewer: state.interviewers[interview.interviewer] }
 		: null;
 
-export { getInterview, getAppointmentsForDay };
+const getInterviewersForDay = (state, day) => {
+	const { days, interviewers } = state;
+	const selectedDay = days.filter((current) => current.name === day)[0];
+	return selectedDay
+		? selectedDay.interviewers.map((id) => interviewers[id])
+		: [];
+};
+
+export { getInterview, getAppointmentsForDay, getInterviewersForDay };
