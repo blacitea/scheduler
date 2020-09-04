@@ -51,7 +51,23 @@ export default function Application(props) {
 			...state.appointments,
 			[id]: appointment,
 		};
-		setState({ ...state, appointments });
+		console.log(appointments);
+
+		const url = `/api/appointments/${id}`;
+
+		// need to return a promise for transition to listen to
+		const promise = axios
+			.put(url, appointment)
+			.then((res) => {
+				//console.log("Did this happen");
+				setState({ ...state, appointments });
+				return true;
+			})
+			.catch((error) => {
+				//console.log(error);
+				return false;
+			});
+		return promise;
 	};
 
 	const scheulde = appointments.map((appointment) => {

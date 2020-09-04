@@ -22,8 +22,9 @@ const Appointment = (props) => {
 			student: name,
 			interviewer,
 		};
-		props.bookInterview(id, interview);
-		transition(SHOW);
+		props.bookInterview(id, interview).then((resolve) => {
+			if (resolve) transition(SHOW);
+		});
 	};
 
 	return (
