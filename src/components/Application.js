@@ -56,17 +56,10 @@ export default function Application(props) {
 		const url = `/api/appointments/${id}`;
 
 		// need to return a promise for transition to listen to
-		const promise = axios
-			.put(url, appointment)
-			.then((res) => {
-				//console.log("Did this happen");
-				setState({ ...state, appointments });
-				return true;
-			})
-			.catch((error) => {
-				//console.log(error);
-				return false;
-			});
+		const promise = axios.put(url, appointment).then((res) => {
+			//console.log("Did this happen");
+			setState({ ...state, appointments });
+		});
 		return promise;
 	};
 
@@ -76,18 +69,7 @@ export default function Application(props) {
 		return axios
 			.delete(url)
 			.then((resolve) => axios.get("/api/appointments"))
-			.then((res) => {
-				return setState((prev) => {
-					return {
-						...prev,
-						appointments: res.data,
-					};
-				});
-			})
-			.catch((error) => {
-				console.log(error);
-				return false;
-			});
+			.then((res) => setState({ ...state, appointments: res.data }));
 	};
 
 	const scheulde = appointments.map((appointment) => {
