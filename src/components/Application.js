@@ -70,6 +70,26 @@ export default function Application(props) {
 		return promise;
 	};
 
+	const cancelInterview = (id) => {
+		const url = `/api/appointments/${id}`;
+		console.log(url);
+		return axios
+			.delete(url)
+			.then((resolve) => axios.get("/api/appointments"))
+			.then((res) => {
+				return setState((prev) => {
+					return {
+						...prev,
+						appointments: res.data,
+					};
+				});
+			})
+			.catch((error) => {
+				console.log(error);
+				return false;
+			});
+	};
+
 	const scheulde = appointments.map((appointment) => {
 		const interview = getInterview(state, appointment.interview);
 		return (
@@ -79,6 +99,7 @@ export default function Application(props) {
 				interview={interview}
 				interviewers={interviewers}
 				bookInterview={bookInterview}
+				cancelInterview={cancelInterview}
 			/>
 		);
 	});
