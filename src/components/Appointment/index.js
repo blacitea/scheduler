@@ -2,6 +2,7 @@ import React from "react";
 import Header from "./Header";
 import Empty from "./Empty";
 import Show from "./Show";
+import Status from "./Status";
 import useVisualMode from "hooks/useVisualMode";
 
 import "./styles.scss";
@@ -11,6 +12,7 @@ import Form from "./Form";
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
+const SAVING = "SAVING";
 
 const Appointment = (props) => {
 	//console.log(props);
@@ -22,6 +24,7 @@ const Appointment = (props) => {
 			student: name,
 			interviewer,
 		};
+		transition(SAVING);
 		props.bookInterview(id, interview).then((resolve) => {
 			if (resolve) transition(SHOW);
 		});
@@ -41,6 +44,7 @@ const Appointment = (props) => {
 					interviewers={interviewers}
 				/>
 			)}
+			{mode === SAVING && <Status message="Saving" />}
 		</article>
 	);
 };
