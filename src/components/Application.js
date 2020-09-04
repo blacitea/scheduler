@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import DayList from "components/DayList";
 import "components/Application.scss";
 import Appointment from "components/Appointment";
@@ -8,69 +7,18 @@ import {
 	getInterview,
 	getInterviewersForDay,
 } from "../helpers/selectors";
+import useApplicationData from "hooks/useApplicationData";
 
 export default function Application(props) {
-	const [state, setState] = useState({
-		day: "Monday",
-		days: [],
-		appointments: {},
-		interviewers: {},
-	});
-
-	const setDay = (day) => setState((prev) => ({ ...prev, day }));
-
-	useEffect(() => {
-		Promise.all([
-			axios.get("/api/days"),
-			axios.get("/api/appointments"),
-			axios.get("/api/interviewers"),
-		])
-			.then((all) => {
-				const [days, appointments, interviewers] = all;
-				setState((prev) => {
-					return {
-						...prev,
-						days: days.data,
-						appointments: appointments.data,
-						interviewers: interviewers.data,
-					};
-				});
-			})
-			.catch((error) => console.error(error));
-	}, []);
+	const {
+		state,
+		setDay,
+		bookInterview,
+		cancelInterview,
+	} = useApplicationData();
 
 	const appointments = getAppointmentsForDay(state, state.day);
 	const interviewers = getInterviewersForDay(state, state.day);
-
-	const bookInterview = (id, interview) => {
-		const appointment = {
-			...state.appointments[id],
-			interview: { ...interview },
-		};
-		const appointments = {
-			...state.appointments,
-			[id]: appointment,
-		};
-		console.log(appointments);
-
-		const url = `/api/appointments/${id}`;
-
-		// need to return a promise for transition to listen to
-		const promise = axios.put(url, appointment).then((res) => {
-			//console.log("Did this happen");
-			setState({ ...state, appointments });
-		});
-		return promise;
-	};
-
-	const cancelInterview = (id) => {
-		const url = `/api/appointments/${id}`;
-		console.log(url);
-		return axios
-			.delete(url)
-			.then((resolve) => axios.get("/api/appointments"))
-			.then((res) => setState({ ...state, appointments: res.data }));
-	};
 
 	const scheulde = appointments.map((appointment) => {
 		const interview = getInterview(state, appointment.interview);
