@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import axios from "axios";
 
 const useApplicationData = () => {
@@ -25,27 +25,34 @@ const useApplicationData = () => {
 					interviewers: action.interviewers,
 				};
 			case SET_INTERVIEW: {
-				// const appointment = {
-				// 	...state.appointments[action.id],
-				// 	interview: { ...action.interview },
-				// };
-				// const appointments = {
-				// 	...state.appointments,
-				// 	[action.id]: appointment,
-				// };
 				const { id, interview } = action;
+				const appointments = {
+					...state.appointments,
+					[id]: {
+						...state.appointments[id],
+						interview,
+					},
+				};
+				// update remaining spots by counting number of interview with null value
+				const days = state.days.map((day) => {
+					if (day.name === state.day) {
+						const spots = day.appointments.reduce(
+							(count, id) =>
+								appointments[id].interview == null ? (count += 1) : count,
+							0
+						);
+						return {
+							...day,
+							spots,
+						};
+					}
+					return day;
+				});
 				// updating the appointments object based on key(id) with updated interview obj
 				return {
-					// ...state,
-					// appointments,
 					...state,
-					appointments: {
-						...state.appointments,
-						[id]: {
-							...state.appointments[id],
-							interview,
-						},
-					},
+					appointments,
+					days,
 				};
 			}
 			default:
@@ -80,40 +87,9 @@ const useApplicationData = () => {
 				});
 			})
 			.catch((error) => console.error(error));
-	}, []); // tried [state.value]
-
-	const bookSlot = (id) => {
-		const dayIndex = state.days.findIndex((day) =>
-			day.appointments.includes(id)
-		);
-		const newDay = {
-			...state.days[dayIndex],
-			spots: state.days[dayIndex].spots - 1,
-		};
-		const newDays = [...state.days];
-		newDays[dayIndex] = newDay;
-
-		return Object.assign(state.days.slice(), { [dayIndex]: newDay });
-	};
-
-	const cancelSlot = (id) => {
-		const dayIndex = state.days.findIndex((day) =>
-			day.appointments.includes(id)
-		);
-		const newDay = {
-			...state.days[dayIndex],
-			spots: state.days[dayIndex].spots + 1,
-		};
-		return [
-			...state.days.slice(0, dayIndex),
-			newDay,
-			...state.days.slice(dayIndex + 1),
-		];
-	};
+	}, []);
 
 	const bookInterview = (id, interview) => {
-		const days = bookSlot(id);
-
 		const url = `/api/appointments/${id}`;
 		// need to return a promise for transition to listen to
 		const promise = axios
@@ -125,7 +101,6 @@ const useApplicationData = () => {
 
 	const cancelInterview = (id) => {
 		const url = `/api/appointments/${id}`;
-		const days = cancelSlot(id);
 		return (
 			axios
 				.delete(url)
