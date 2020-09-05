@@ -1,16 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import axios from "axios";
 
 const useApplicationData = () => {
-	const [state, setState] = useState({
+	// const [state, setState] = useState({
+	// 	day: "Monday",
+	// 	days: [],
+	// 	appointments: {},
+	// 	interviewers: {},
+	// 	// value: true,  to use in useEffect 2nd arg for trigger fetching of data
+	// });
+	const SET_DAY = "SET_DAY";
+	const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+	const SET_INTERVIEW = "SET_INTERVIEW";
+
+	const reducer = (state, action) => {
+		switch (action.type) {
+			case SET_DAY:
+				return { ...state, day: action.day };
+			case SET_APPLICATION_DATA:
+				return {
+					...state,
+					days: action.days,
+					appointments: action.appointments,
+					interviewers: action.interviewers,
+				};
+			case SET_INTERVIEW: {
+				return;
+			}
+			default:
+				throw new Error(
+					`Tried to reduce with unsupported action type: ${action.type}`
+				);
+		}
+	};
+
+	const [state, dispatch] = useReducer(reducer, {
 		day: "Monday",
 		days: [],
 		appointments: {},
 		interviewers: {},
-		// value: true,  to use in useEffect 2nd arg for trigger fetching of data
 	});
 
-	const setDay = (day) => setState((prev) => ({ ...prev, day }));
+	const setDay = (day) => dispatch({ type: SET_DAY, day });
+
 	useEffect(() => {
 		Promise.all([
 			axios.get("/api/days"),
@@ -19,14 +51,11 @@ const useApplicationData = () => {
 		])
 			.then((all) => {
 				const [days, appointments, interviewers] = all;
-				setState((prev) => {
-					console.log("Update by effect hook happened");
-					return {
-						...prev,
-						days: days.data,
-						appointments: appointments.data,
-						interviewers: interviewers.data,
-					};
+				dispatch({
+					type: SET_APPLICATION_DATA,
+					days: days.data,
+					appointments: appointments.data,
+					interviewers: interviewers.data,
 				});
 			})
 			.catch((error) => console.error(error));
@@ -75,23 +104,10 @@ const useApplicationData = () => {
 
 		const url = `/api/appointments/${id}`;
 		// need to return a promise for transition to listen to
-		const promise = axios.put(url, appointment).then((res) => {
-			setState((prev) => ({
-				...prev,
-				days,
-				appointments,
-				//value: !prev.value,  toggle value to trigger an useEffect run
-			}));
-			// return setState({
-			// 	...state,
-			// 	appointments,
-			// });
-		});
-		// .then((res) => {
-		// 	console.log(state.value);
-		// 	state.value = !state.value;
-		// 	console.log(state.value);
-		// });
+		const promise = axios
+			.put(url, appointment)
+			.then((res) => dispatch({ type: SET_INTERVIEW, interview, id }));
+
 		return promise;
 	};
 
@@ -101,14 +117,7 @@ const useApplicationData = () => {
 		return axios
 			.delete(url)
 			.then((resolve) => axios.get("/api/appointments"))
-			.then((res) =>
-				setState((prev) => ({
-					...prev,
-					days,
-					// value: !prev.value,   toggle value to trigger an useEffect run
-					appointments: res.data,
-				}))
-			);
+			.then((res) => dispatch({ type: SET_INTERVIEW, interview: null }));
 	};
 
 	return {
