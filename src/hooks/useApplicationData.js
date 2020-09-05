@@ -25,7 +25,28 @@ const useApplicationData = () => {
 					interviewers: action.interviewers,
 				};
 			case SET_INTERVIEW: {
-				return;
+				// const appointment = {
+				// 	...state.appointments[action.id],
+				// 	interview: { ...action.interview },
+				// };
+				// const appointments = {
+				// 	...state.appointments,
+				// 	[action.id]: appointment,
+				// };
+				const { id, interview } = action;
+				// updating the appointments object based on key(id) with updated interview obj
+				return {
+					// ...state,
+					// appointments,
+					...state,
+					appointments: {
+						...state.appointments,
+						[id]: {
+							...state.appointments[id],
+							interview,
+						},
+					},
+				};
 			}
 			default:
 				throw new Error(
@@ -91,21 +112,12 @@ const useApplicationData = () => {
 	};
 
 	const bookInterview = (id, interview) => {
-		const appointment = {
-			...state.appointments[id],
-			interview: { ...interview },
-		};
-		const appointments = {
-			...state.appointments,
-			[id]: appointment,
-		};
-
 		const days = bookSlot(id);
 
 		const url = `/api/appointments/${id}`;
 		// need to return a promise for transition to listen to
 		const promise = axios
-			.put(url, appointment)
+			.put(url, { interview })
 			.then((res) => dispatch({ type: SET_INTERVIEW, interview, id }));
 
 		return promise;
@@ -114,10 +126,12 @@ const useApplicationData = () => {
 	const cancelInterview = (id) => {
 		const url = `/api/appointments/${id}`;
 		const days = cancelSlot(id);
-		return axios
-			.delete(url)
-			.then((resolve) => axios.get("/api/appointments"))
-			.then((res) => dispatch({ type: SET_INTERVIEW, interview: null }));
+		return (
+			axios
+				.delete(url)
+				//.then((resolve) => axios.get("/api/appointments"))
+				.then((res) => dispatch({ type: SET_INTERVIEW, interview: null, id }))
+		);
 	};
 
 	return {
