@@ -1,5 +1,5 @@
-import { useEffect, useReducer } from "react";
-import axios from "axios";
+import { useEffect, useReducer } from 'react';
+import axios from 'axios';
 
 const useApplicationData = () => {
 	// const [state, setState] = useState({
@@ -9,9 +9,9 @@ const useApplicationData = () => {
 	// 	interviewers: {},
 	// 	// value: true,  to use in useEffect 2nd arg for trigger fetching of data
 	// });
-	const SET_DAY = "SET_DAY";
-	const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-	const SET_INTERVIEW = "SET_INTERVIEW";
+	const SET_DAY = 'SET_DAY';
+	const SET_APPLICATION_DATA = 'SET_APPLICATION_DATA';
+	const SET_INTERVIEW = 'SET_INTERVIEW';
 
 	const reducer = (state, action) => {
 		switch (action.type) {
@@ -34,7 +34,7 @@ const useApplicationData = () => {
 					},
 				};
 				// update remaining spots by counting number of interview with null value
-				const days = state.days.map((day) => {
+				const days = state.days.map(day => {
 					if (day.name === state.day) {
 						const spots = day.appointments.reduce(
 							(count, id) =>
@@ -63,21 +63,21 @@ const useApplicationData = () => {
 	};
 
 	const [state, dispatch] = useReducer(reducer, {
-		day: "Monday",
+		day: 'Monday',
 		days: [],
 		appointments: {},
 		interviewers: {},
 	});
 
-	const setDay = (day) => dispatch({ type: SET_DAY, day });
+	const setDay = day => dispatch({ type: SET_DAY, day });
 
 	useEffect(() => {
 		Promise.all([
-			axios.get("/api/days"),
-			axios.get("/api/appointments"),
-			axios.get("/api/interviewers"),
+			axios.get('/api/days'),
+			axios.get('/api/appointments'),
+			axios.get('/api/interviewers'),
 		])
-			.then((all) => {
+			.then(all => {
 				const [days, appointments, interviewers] = all;
 				dispatch({
 					type: SET_APPLICATION_DATA,
@@ -86,7 +86,7 @@ const useApplicationData = () => {
 					interviewers: interviewers.data,
 				});
 			})
-			.catch((error) => console.error(error));
+			.catch(error => console.error(error));
 	}, []);
 
 	const bookInterview = (id, interview) => {
@@ -94,18 +94,18 @@ const useApplicationData = () => {
 		// need to return a promise for transition to listen to
 		const promise = axios
 			.put(url, { interview })
-			.then((res) => dispatch({ type: SET_INTERVIEW, interview, id }));
+			.then(res => dispatch({ type: SET_INTERVIEW, interview, id }));
 
 		return promise;
 	};
 
-	const cancelInterview = (id) => {
+	const cancelInterview = id => {
 		const url = `/api/appointments/${id}`;
 		return (
 			axios
 				.delete(url)
 				//.then((resolve) => axios.get("/api/appointments"))
-				.then((res) => dispatch({ type: SET_INTERVIEW, interview: null, id }))
+				.then(res => dispatch({ type: SET_INTERVIEW, interview: null, id }))
 		);
 	};
 
