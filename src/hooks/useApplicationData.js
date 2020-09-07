@@ -2,13 +2,6 @@ import { useEffect, useReducer } from 'react';
 import axios from 'axios';
 
 const useApplicationData = () => {
-	// const [state, setState] = useState({
-	// 	day: "Monday",
-	// 	days: [],
-	// 	appointments: {},
-	// 	interviewers: {},
-	// 	// value: true,  to use in useEffect 2nd arg for trigger fetching of data
-	// });
 	const SET_DAY = 'SET_DAY';
 	const SET_APPLICATION_DATA = 'SET_APPLICATION_DATA';
 	const SET_INTERVIEW = 'SET_INTERVIEW';
@@ -72,6 +65,12 @@ const useApplicationData = () => {
 	const setDay = day => dispatch({ type: SET_DAY, day });
 
 	useEffect(() => {
+		const webSocket = new WebSocket('ws://localhost:8001');
+
+		webSocket.addEventListener('open', event => webSocket.send('ping'));
+		webSocket.addEventListener('message', event =>
+			console.log('Message from server', JSON.parse(event.data))
+		);
 		Promise.all([
 			axios.get('/api/days'),
 			axios.get('/api/appointments'),
