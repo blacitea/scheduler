@@ -2,13 +2,6 @@ import { useEffect, useReducer } from 'react';
 import axios from 'axios';
 
 const useApplicationData = () => {
-	// const [state, setState] = useState({
-	// 	day: "Monday",
-	// 	days: [],
-	// 	appointments: {},
-	// 	interviewers: {},
-	// 	// value: true,  to use in useEffect 2nd arg for trigger fetching of data
-	// });
 	const SET_DAY = 'SET_DAY';
 	const SET_APPLICATION_DATA = 'SET_APPLICATION_DATA';
 	const SET_INTERVIEW = 'SET_INTERVIEW';
@@ -33,9 +26,15 @@ const useApplicationData = () => {
 						interview,
 					},
 				};
+
+				// verify which day the update of interview happens
+				const targetDay = state.days.filter(day =>
+					day.appointments.includes(id)
+				)[0];
+
 				// update remaining spots by counting number of interview with null value
 				const days = state.days.map(day => {
-					if (day.name === state.day) {
+					if (day.name === targetDay.name) {
 						const spots = day.appointments.reduce(
 							(count, id) =>
 								appointments[id].interview == null ? (count += 1) : count,
@@ -72,6 +71,20 @@ const useApplicationData = () => {
 	const setDay = day => dispatch({ type: SET_DAY, day });
 
 	useEffect(() => {
+		const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
+		webSocket.addEventListener('open', event => webSocket.send('ping'));
+		webSocket.addEventListener('message', event => {
+			const newInterview = JSON.parse(event.data);
+			if (newInterview.type === 'SET_INTERVIEW') {
+				dispatch({
+					type: newInterview.type,
+					interview: newInterview.interview,
+					id: newInterview.id,
+				});
+			}
+		});
+
 		Promise.all([
 			axios.get('/api/days'),
 			axios.get('/api/appointments'),
