@@ -26,9 +26,15 @@ const useApplicationData = () => {
 						interview,
 					},
 				};
+
+				// verify which day the update of interview happens
+				const targetDay = state.days.filter(day =>
+					day.appointments.includes(id)
+				)[0];
+
 				// update remaining spots by counting number of interview with null value
 				const days = state.days.map(day => {
-					if (day.name === state.day) {
+					if (day.name === targetDay.name) {
 						const spots = day.appointments.reduce(
 							(count, id) =>
 								appointments[id].interview == null ? (count += 1) : count,
