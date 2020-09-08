@@ -65,12 +65,20 @@ const useApplicationData = () => {
 	const setDay = day => dispatch({ type: SET_DAY, day });
 
 	useEffect(() => {
-		const webSocket = new WebSocket('ws://localhost:8001');
+		const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
 		webSocket.addEventListener('open', event => webSocket.send('ping'));
-		webSocket.addEventListener('message', event =>
-			console.log('Message from server', JSON.parse(event.data))
-		);
+		webSocket.addEventListener('message', event => {
+			const newInterview = JSON.parse(event.data);
+			if (newInterview.type === 'SET_INTERVIEW') {
+				dispatch({
+					type: newInterview.type,
+					interview: newInterview.interview,
+					id: newInterview.id,
+				});
+			}
+		});
+
 		Promise.all([
 			axios.get('/api/days'),
 			axios.get('/api/appointments'),
