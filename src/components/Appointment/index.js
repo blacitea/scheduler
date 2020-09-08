@@ -56,7 +56,7 @@ const Appointment = props => {
 	};
 
 	return (
-		<article className="appointment">
+		<article className="appointment" data-testid="appointment">
 			<Header time={props.time} />
 			{mode === SHOW && interview && (
 				<Show
