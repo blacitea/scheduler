@@ -1,30 +1,39 @@
-import React from "react";
-import Header from "./Header";
-import Empty from "./Empty";
-import Show from "./Show";
-import Status from "./Status";
-import Confirm from "./Confirm";
-import Error from "./Error";
-import useVisualMode from "hooks/useVisualMode";
+import React from 'react';
+import Header from './Header';
+import Empty from './Empty';
+import Show from './Show';
+import Status from './Status';
+import Confirm from './Confirm';
+import Error from './Error';
+import useVisualMode from 'hooks/useVisualMode';
 
-import "./styles.scss";
-import Form from "./Form";
+import './styles.scss';
+import Form from './Form';
+
+import { useEffect } from 'react';
 
 // List of mode constrain
-const EMPTY = "EMPTY";
-const SHOW = "SHOW";
-const CREATE = "CREATE";
-const SAVING = "SAVING";
-const DELETING = "DELETING";
-const CONFIRM = "CONFIRM";
-const EDIT = "EDIT";
-const ERRORSAVE = "ERRORSAVE";
-const ERRORDELETE = "ERRORDELETE";
+const EMPTY = 'EMPTY';
+const SHOW = 'SHOW';
+const CREATE = 'CREATE';
+const SAVING = 'SAVING';
+const DELETING = 'DELETING';
+const CONFIRM = 'CONFIRM';
+const EDIT = 'EDIT';
+const ERRORSAVE = 'ERRORSAVE';
+const ERRORDELETE = 'ERRORDELETE';
 
-const Appointment = (props) => {
+const Appointment = props => {
 	//console.log(props);
+
 	const { interview, interviewers, id } = props;
+
 	const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
+
+	useEffect(() => {
+		if (interview && mode === EMPTY) transition(SHOW);
+		if (!interview && mode === SHOW) transition(EMPTY);
+	}, [interview, transition, mode]);
 
 	const onSave = (name, interviewer) => {
 		const interview = {
@@ -34,22 +43,22 @@ const Appointment = (props) => {
 		transition(SAVING);
 		props
 			.bookInterview(id, interview)
-			.then((resolve) => transition(SHOW))
-			.catch((error) => transition(ERRORSAVE, true));
+			.then(resolve => transition(SHOW))
+			.catch(error => transition(ERRORSAVE, true));
 	};
 
 	const onDelete = () => {
 		transition(DELETING, true);
 		props
 			.cancelInterview(id)
-			.then((resolve) => transition(EMPTY))
-			.catch((error) => transition(ERRORDELETE, true));
+			.then(resolve => transition(EMPTY))
+			.catch(error => transition(ERRORDELETE, true));
 	};
 
 	return (
 		<article className="appointment">
 			<Header time={props.time} />
-			{mode === SHOW && (
+			{mode === SHOW && interview && (
 				<Show
 					student={interview.student}
 					interviewer={interview.interviewer}
