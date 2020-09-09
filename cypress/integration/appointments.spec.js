@@ -19,4 +19,29 @@ describe('Appointment', () => {
 		// cy.contains('Lydia Miller-Jones'); // wait till student name displayed
 		// cy.get('.appointment__card--show').eq(1).contains('Sylvia Palmer'); // check for class name and interviewer name display
 	});
+
+	it('should edit an interview', () => {
+		// {option} force:true overrides the actionable checks
+		cy.get('[alt=Edit]').click({ force: true });
+
+		cy.get('[data-testid=student-name-input]').clear().type('Mike Jaydan');
+		cy.get('[alt="Tori Malcolm"]').click();
+
+		cy.contains('Save').click();
+
+		cy.contains('.appointment__card--show', 'Mike Jaydan');
+		cy.contains('.appointment__card--show', 'Tori Malcolm');
+	});
+
+	it('should cancel an interview', () => {
+		cy.get('[alt=Delete]').click({ force: true });
+
+		cy.contains('Confirm').click();
+
+		// Confirm loading page - status(Deleting) displayed and completed
+		cy.contains('Deleting');
+		cy.contains('Deleting').should('not.exist');
+
+		cy.contains('.appointment__card--show', 'Archie Cohen').should('not.exist');
+	});
 });
