@@ -31,7 +31,7 @@ Database is deployed on [Heruko](www.heroku.com)
 
 > ### Websocket
 >
-> ![Update auto push to all clients](https://raw.githubusercontent.com/blacitea/scheduler/master/public/gif/websocket_stretch.gif)
+> ![Update auto push to all clients](https://raw.githubusercontent.com/blacitea/scheduler/master/public/gif/websocket_push_to_clients.gif)
 
 <br>
 <br>
