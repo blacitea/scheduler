@@ -1,6 +1,4 @@
-# Interview Scheduler
-
-![Activity](https://img.shields.io/github/last-commit/blacitea/scheduler?style=flat-square)&nbsp; &nbsp;![Build](https://img.shields.io/netlify/2793a41d-0f44-48bf-a089-b81341630ebf?style=flat-square)
+# Interview Scheduler <div style="text-align: right"> <img src="https://img.shields.io/github/last-commit/blacitea/scheduler?style=flat-square" alt="Activity"> &nbsp; <img src="https://img.shields.io/netlify/2793a41d-0f44-48bf-a089-b81341630ebf?style=flat-square" alt="Build"> </div>
 
 <br/>
 
