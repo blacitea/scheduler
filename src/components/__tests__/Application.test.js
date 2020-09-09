@@ -29,7 +29,7 @@ describe('Application', () => {
 		});
 	});
 
-	xit('aysnc-await: defaults to Monday and changes the schedule when a new day is selected', async () => {
+	it('aysnc-await: defaults to Monday and changes the schedule when a new day is selected', async () => {
 		// async tag the funcion
 		const { getByText } = render(<Application />);
 
