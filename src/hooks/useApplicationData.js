@@ -73,7 +73,7 @@ const useApplicationData = () => {
 	useEffect(() => {
 		const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
-		webSocket.addEventListener('open', event => webSocket.send('ping'));
+		// webSocket.addEventListener('open', event => webSocket.send('ping'));
 		webSocket.addEventListener('message', event => {
 			const newInterview = JSON.parse(event.data);
 			if (newInterview.type === 'SET_INTERVIEW') {
