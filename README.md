@@ -1,5 +1,7 @@
 # Interview Scheduler
 
+![Activity](https://img.shields.io/github/last-commit/blacitea/scheduler?style=flat-square)&nbsp; &nbsp;![Build](https://img.shields.io/netlify/2793a41d-0f44-48bf-a089-b81341630ebf?style=flat-square)
+
 ## Setup
 
 Install dependencies with `npm install`.
