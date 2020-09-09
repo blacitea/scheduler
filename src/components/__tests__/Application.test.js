@@ -11,6 +11,7 @@ import {
 	getByAltText,
 	getByPlaceholderText,
 	queryByText,
+	waitForElementToBeRemoved,
 } from '@testing-library/react';
 
 import Application from 'components/Application';
@@ -66,5 +67,20 @@ describe('Application', () => {
 			queryByText(day, 'Monday')
 		);
 		expect(getByText(day, /no spots remaining/i)).toBeInTheDocument();
+	});
+
+	it('loads data, cancels an interview and increases the spots remaining for Monday by 1', async () => {
+		// 1. Render the Application.
+		const { container } = render(<Application />);
+
+		// 2. Wait until the text "Archie Cohen" is displayed.
+		await waitForElement(() => getByText(container, 'Archie Cohen'));
+
+		// 3. Click the delete button on the booked appointment
+		// 4. Check that CONFIRM mode is rendered
+		// 5. Click the confirm button to cancel the appointment
+		// 6. Missed - Check that the element with the text 'Deleting' is displayed. ( mode: STATUS)
+		// 7. Check that the appointment slot is now empty - wait until the element with the "Add" button is displayed.
+		// 8. Check that the DayListItem with the text 'Monday' also has the text "2 spots remaining"
 	});
 });
