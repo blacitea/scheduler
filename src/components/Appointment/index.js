@@ -24,8 +24,6 @@ const ERRORSAVE = 'ERRORSAVE';
 const ERRORDELETE = 'ERRORDELETE';
 
 const Appointment = props => {
-	//console.log(props);
-
 	const { interview, interviewers, id } = props;
 
 	const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);

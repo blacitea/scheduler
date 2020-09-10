@@ -38,9 +38,6 @@ const Form = props => {
 						type="text"
 						placeholder="Enter Student Name"
 						data-testid="student-name-input"
-						/*
-          This must be a controlled component
-        */
 					/>
 					<section className="appointment__validation">{error}</section>
 				</form>

@@ -8,11 +8,7 @@ describe('Navigation', () => {
 
 	it('should navigation to Tuesday', () => {
 		cy.visit('/');
-		// cy.get('li').contains('Tuesday').click();
-		// cy.contains('li', 'Tuesday').should(
-		// 	'have.class',
-		// 	'day-list__item--selected'
-		// );
+
 		cy.contains('[data-testid=day]', 'Tuesday') // use data-testid / data-cy over element tag
 			.click()
 			.should('have.class', 'day-list__item--selected');

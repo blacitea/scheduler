@@ -15,9 +15,6 @@ describe('Appointment', () => {
 
 		cy.contains('.appointment__card--show', 'Lydia Miller-Jones');
 		cy.contains('.appointment__card--show', 'Sylvia Palmer');
-
-		// cy.contains('Lydia Miller-Jones'); // wait till student name displayed
-		// cy.get('.appointment__card--show').eq(1).contains('Sylvia Palmer'); // check for class name and interviewer name display
 	});
 
 	it('should edit an interview', () => {
