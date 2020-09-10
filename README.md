@@ -40,29 +40,54 @@ Database is deployed on [Heruko](www.heroku.com)
 
 Install dependencies with `npm install`.
 
-### Running Webpack Development Server
+> ### Important
+>
+> This application require an API server to function properly
+>
+> Please visit [Scheduler-api](https://github.com/blacitea/scheduler-api) and follow the [README](https://github.com/blacitea/scheduler-api/blob/master/README.md) to ensure API server up and running to proceed
 
-```sh
-npm start
-```
+<br/>
 
-### Running Jest Test Framework
+### NPM command scripts
 
-```sh
-npm test
-```
+**_API server MUST be up and running for axios request_**
 
-### Running Storybook Visual Testbed
+<br/>
 
-```sh
-npm run storybook
-```
+- Running Webpack Development Server
 
-### Running Cypress E2E Test
+  ```sh
+  npm start
+  ```
 
-```sh
-npm run cypress
-```
+- Running Jest Test Framework
+
+  Create file `.env.test` by copying `.env.development` to provide test environment variables
+
+  ```sh
+  cp .env.development .env.test
+  npm test
+  ```
+
+- Running Storybook Visual Testbed
+
+  ```sh
+  npm run storybook
+  ```
+
+- Running Cypress E2E Test
+
+  1. Run script for API testing server ( scheduler-api)
+
+     ```sh
+     npm run test:server
+     ```
+
+  2. Run script for Cypress test ( scheduler)
+
+     ```sh
+     npm run cypress
+     ```
 
 ## Dependencies
 
@@ -70,3 +95,4 @@ npm run cypress
 - prop-types : ^15.7.2
 - react-hooks-testing-library : ^0.6.0
 - react-test-renderer : ^16.13.1
+- cypress
