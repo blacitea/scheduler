@@ -6,12 +6,10 @@ import {
 	waitForElement,
 	fireEvent,
 	getByText,
-	prettyDOM,
 	getAllByTestId,
 	getByAltText,
 	getByPlaceholderText,
 	queryByText,
-	waitForElementToBeRemoved,
 } from '@testing-library/react';
 
 import Application from 'components/Application';
