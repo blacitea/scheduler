@@ -1,6 +1,5 @@
 import { useEffect, useReducer } from 'react';
 import axios from 'axios';
-import { cleanup } from '@testing-library/react';
 
 const useApplicationData = () => {
 	const SET_DAY = 'SET_DAY';
