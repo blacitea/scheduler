@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from 'react';
 import axios from 'axios';
+import { cleanup } from '@testing-library/react';
 
 const useApplicationData = () => {
 	const SET_DAY = 'SET_DAY';
@@ -100,6 +101,7 @@ const useApplicationData = () => {
 				});
 			})
 			.catch(error => console.error(error));
+		return () => webSocket.close();
 	}, []);
 
 	const bookInterview = (id, interview) => {
