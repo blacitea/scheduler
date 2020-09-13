@@ -6,9 +6,7 @@
 
 Interactive SPA built with React where user can Browse, Read, Edit, Add and Delete interview appointments. Requests are made to an API server allows persist information.
 
-Application is deployed on Netlify and can be visited [HERE](https://dazzling-kalam-f952d0.netlify.app/)
-
-Database is deployed on [Heruko](www.heroku.com)
+Application is deployed on Netlify with database hosted on Heruko. [Check it out!](https://dazzling-kalam-f952d0.netlify.app/)
 
 <br/>
 <br/>
