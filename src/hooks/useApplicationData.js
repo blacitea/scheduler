@@ -19,6 +19,10 @@ const useApplicationData = () => {
 	useEffect(() => {
 		const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
+		const ping = setInterval(() => {
+			webSocket.send('keep alive');
+		}, 150000);
+
 		// webSocket.addEventListener('open', event => webSocket.send('ping'));
 		webSocket.addEventListener('message', event => {
 			const newInterview = JSON.parse(event.data);
